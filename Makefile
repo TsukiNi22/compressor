@@ -16,7 +16,7 @@ W += -Wuninitialized -Wmaybe-uninitialized -Werror
 DEBUG := -g -ggdb3
 
 CPPFLAGS := -I ./include/
-LDFLAGS := -L ./lib/ -lmy
+LDFLAGS := -L ./lib/ -lmy -lm
 CFLAGS := $(W)
 
 ifeq ($(d), t)
