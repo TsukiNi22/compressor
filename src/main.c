@@ -17,12 +17,14 @@ int main(int const argc, char const *argv[])
 
     if (!argv)
         return err_prog(PTR_ERR, "In: main", EPITECH_ERR);
+    data.help = false;
+    data.err_sys = false;
     res = compressor(argc, argv, &data);
     if (res == KO || res == FATAL_ERR) {
         if (res != FATAL_ERR)
             free_data(&data);
         if (!data.err_sys)
-            my_printf("%Obinary: An error has occurred, "
+            my_printf("%Ocompressor: An error has occurred, "
             "execution has been interrupted.", 2);
         return EPITECH_ERR;
     }

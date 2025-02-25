@@ -34,7 +34,10 @@ INIT :=		init/init_data.c \
 			init/data/init_global.c \
 			init/init_flag.c\
 			init/flag/null.c \
-			init/flag/help.c
+			init/flag/help.c \
+			init/flag/precision.c \
+			init/flag/round.c \
+			init/flag/calculate.c
 
 FILES := $(GLOBAL) $(INIT)
 SRC := $(addprefix src/, $(FILES))

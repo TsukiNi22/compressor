@@ -11,17 +11,16 @@
 #include "error.h"
 #include <stdbool.h>
 
-static int full_flag(main_data_t *data,
-    int const argc, char const *argv[], int const i)
+static int full_flag(main_data_t *data, int const argc, char const *argv[], int const i)
 {
     if (!data || !argv)
         return err_prog(PTR_ERR, "In: full_flag", KO);
     for (int j = 0; full_flags[j]; j++) {
         if (my_strcmp(argv[i], full_flags[j]) == 0)
-            return flag_functions[j](data, argc, &(argv[i]), -1);
+            return flag_functions[j](data, argc - i, &(argv[i]));
     }
     data->err_sys = true;
-    my_printf("%Obinary: Unrecognized option \'%s\'.\n", 2, argv[i]);
+    my_printf("%O%s: Unknow option.\n", 2, argv[i]);
     return KO;
 }
 
@@ -38,8 +37,7 @@ static int is_flag_char(char const c, int *index)
     return false;
 }
 
-static int flag(main_data_t *data,
-    int const argc, char const *argv[], int const i)
+static int flag(main_data_t *data, int const argc, char const *argv[], int const i)
 {
     int index = 0;
 
@@ -48,16 +46,16 @@ static int flag(main_data_t *data,
     for (int j = 1; argv[i][j]; j++) {
         if (!is_flag_char(argv[i][j], &index)) {
             data->err_sys = true;
-            my_printf("%Obinary: Invalid option \'%c\'.\n", 2, argv[i][j]);
+            my_printf("%O%c: Unknow option.\n", 2, argv[i][j]);
             return KO;
         }
         if (flags_argc[index] != 0 && (j > 1 || argv[i][j + 1])) {
             data->err_sys = true;
-            my_printf("%Obinary: \'%c\' can't be combined with other.\n",
+            my_printf("%O%c: Can't be combined with other.\n",
             2, argv[i][j]);
             return KO;
         }
-        if (flag_functions[j](data, argc - j, &(argv[i]), j) == KO)
+        if (flag_functions[index](data, argc - i, &(argv[i])) == KO)
             return err_prog(UNDEF_ERR, "In: flag", KO);
     }
     return OK;
@@ -69,8 +67,10 @@ int init_flag(main_data_t *data, int const argc, char const *argv[])
         return err_prog(PTR_ERR, "In: init_flag", KO);
     for (int i = 0; i < argc; i++) {
         if ((argv[i][0] == '-' && argv[i][1] == flags[0] && !argv[i][2])
-            || my_strcmp(argv[i], full_flags[0]) == 0)
+            || my_strcmp(argv[i], full_flags[0]) == 0) {
+            data->help = true;
             return flag_help();
+        }
     }
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] != '-')
