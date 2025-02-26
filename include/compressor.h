@@ -38,6 +38,7 @@ typedef struct main_data_s {
     bool b_precision;
     bool b_round;
     bool calculate;
+    bool undo;
 
     /* global const */
     char precision; // 1 <-> 17 // 25
@@ -45,8 +46,10 @@ typedef struct main_data_s {
     unsigned int max;
     unsigned int redution_size;
 
-    /* error / help */
+    /* help */
     bool help;
+    
+    /* error */
     bool err_sys;
 } main_data_t;
 
@@ -55,17 +58,20 @@ typedef struct main_data_s {
 
 /* compressor */ // Error: KO
 int compressor(int const argc, char const *argv[], main_data_t *data);
-int compress_data(int precision, int max, info_t *info, unsigned int a, unsigned int b);
-int decompress_data(int precision, int max, info_t *info, unsigned int *a, unsigned int *b);
+int bits_compressor(int precision, int max, info_t *info, unsigned int a, unsigned int b);
+int bits_decompressor(int precision, int max, info_t *info, unsigned int *a, unsigned int *b);
+int calculate(main_data_t *data);
+int decompress_files(main_data_t *data);
+int compress_files(main_data_t *data);
 
     /* init_data */
 int init_data(main_data_t *data); // Error: KO
-int init_global(main_data_t *data); // Error: KO
 
 /* init_flag */
 int init_flag(main_data_t *data, int const argc, char const *argv[]); // Error: KO
 int flag_help(void); // Error: KO
 int flag_null(main_data_t *data, int const argc, char const *argv[]); // Error: KO
+int flag_undo(main_data_t *data, int const argc, char const *argv[]); // Error: KO
 int flag_precision(main_data_t *data, int const argc, char const *argv[]); // Error: KO
 int flag_round(main_data_t *data, int const argc, char const *argv[]); // Error: KO
 int flag_calculate(main_data_t *data, int const argc, char const *argv[]); // Error: KO
