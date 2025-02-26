@@ -21,12 +21,6 @@ int main(int const argc, char const *argv[])
     if (!argv)
         return KO;
 
-    /* initialisation of the boolean */
-    data.calculate = false;
-    data.undo = false;
-    data.help = false;
-    data.err_sys = false;
-
     /* main execution */
     res = compressor(argc, argv, &data);
 

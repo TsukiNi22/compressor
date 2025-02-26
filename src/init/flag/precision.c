@@ -31,7 +31,6 @@ int flag_precision(main_data_t *data, int const argc, char const *argv[])
     }
 
     /* set the new precision defined */
-    data->b_precision = true;
     data->precision = atoi(argv[1]);
     if (data->precision < 1 || data->precision > 25) {
         data->err_sys = true;

@@ -14,7 +14,7 @@ int flag_help(void)
     int res = 0;
 
     /* display the help */
-    res = fprintf(stdin, "DESCRIPTION:\n"
+    res = printf("DESCRIPTION:\n"
     "\tA file compressor with a littel bit of loss (depend of the precision)\n"
     "\tThe ouput file extension is \'.crped\'\n\n"
     "USAGE:\n"
@@ -34,6 +34,7 @@ int flag_help(void)
     "\t-\'-r round\' or \'--round round\'\n"
     "\t\tChange the number of round used to compresse the files (default: auto (~50%% compression))\n\n"
     "INFORMATION:\n"
+    "\t- Files name always before the flag, else there will be ignored.\n"
     "\t- The precision will be the number of bits used to store some data and change the rapidity of the compression.\n"
     "\t  (min: 1; recommended: 17; max: 25)\n"
     "\t  default: 17\n"

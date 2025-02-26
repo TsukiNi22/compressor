@@ -31,7 +31,6 @@ int flag_round(main_data_t *data, int const argc, char const *argv[])
     }
 
     /* set the new value for round */
-    data->b_round = true;
     data->round = atoi(argv[1]);
     return OK;
 }

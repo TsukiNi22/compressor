@@ -15,16 +15,14 @@
 /* check the given file is there are file and accesible */
 static int check_file(int const argc, char const *argv[], main_data_t *data)
 {
-    /* init of the struct used for the lstat function */
     struct stat st = {0};
+    bool file = false;
 
     /* function argument check */
     if (!data || !argv)
         return KO;
     
-    for (int i = 1; i < argc; i++) {
-        if (argv[i][0] == '-')
-            continue;
+    for (int i = 1; i < argc && argv[i][0] != '-'; i++) {
         if (access(argv[i], F_OK) == KO) {
             data->err_sys = true;
             fprintf(stderr, "%s: The file or directory doesn't exist.\n", argv[i]);
@@ -44,6 +42,14 @@ static int check_file(int const argc, char const *argv[], main_data_t *data)
             fprintf(stderr, "%s: This is definitly not a normal file.\n", argv[i]);
             return KO;
         }
+        file = true;
+    }
+
+    /* check if a file have been detected */
+    if (!file) {
+        data->err_sys = true;
+        fprintf(stderr, "compressor: No file given.\n");
+        return KO;
     }
     return OK;
 }
@@ -56,14 +62,18 @@ int compressor(int const argc, char const *argv[], main_data_t *data)
         return KO;
 
     /* initialisation */
+    if (init_data(data) == KO)
+        return FATAL_ERR;
     if (init_flag(data, argc, argv) == KO)
         return FATAL_ERR;
     if (data->help)
         return OK;
     if (check_file(argc, argv, data) == KO)
         return KO;
-    if (init_data(data) == KO)
-        return FATAL_ERR;
+    
+    /* set the max variable with the precision */
+    for (unsigned int n = 1, i = 0; i < (unsigned int) data->precision; n <<= 1, i++)
+        data->max += n;
 
     /* main execution */
     if (data->calculate)

@@ -35,8 +35,6 @@ typedef union info_u {
 /* data */
 typedef struct main_data_s {
     /* init_status */
-    bool b_precision;
-    bool b_round;
     bool calculate;
     bool undo;
 
