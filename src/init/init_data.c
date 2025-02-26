@@ -26,5 +26,8 @@ int init_data(main_data_t *data)
     data->round = -1;
     data->max = 0;
     data->redution_size = INT_BITS_SIZE + data->precision + ZERO_NB_SIZE + OVERFLOW_SIZE;
+    
+    /* set to 0 the global var */
+    data->round_nb = 0;
     return OK;
 }

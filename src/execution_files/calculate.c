@@ -9,10 +9,10 @@
 #include "error.h"
 
 /* calculate the percentage of compresion */
-int calculate(main_data_t *data)
+int calculate(main_data_t *data, char const *file_path)
 {
     /* function argument check */
-    if (!data)
+    if (!data || !file_path)
         return KO;
 
     return OK;

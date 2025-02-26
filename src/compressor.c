@@ -27,7 +27,7 @@ static int check_file(int const argc, char const *argv[], main_data_t *data)
             data->err_sys = true;
             fprintf(stderr, "%s: The file or directory doesn't exist.\n", argv[i]);
             return KO;
-        } else if (access(argv[i], X_OK) == KO) {
+        } else if (access(argv[i], R_OK) == KO) {
             data->err_sys = true;
             fprintf(stderr, "%s: Can't access file or directory.\n", argv[i]);
             return KO;
@@ -57,6 +57,8 @@ static int check_file(int const argc, char const *argv[], main_data_t *data)
 /* main function of the compressor */
 int compressor(int const argc, char const *argv[], main_data_t *data)
 {
+    int res = OK;
+
     /* function argument check */
     if (!data || !argv)
         return KO;
@@ -76,12 +78,17 @@ int compressor(int const argc, char const *argv[], main_data_t *data)
         data->max += n;
 
     /* main execution */
-    if (data->calculate)
-        return calculate(data);
-    if (data->undo)
-        return decompress_files(data);
-    return compress_files(data);
-
+    for (int i = 1; i < argc && argv[i][0] != '-'; i++) {
+        if (data->calculate)
+            res = calculate(data, argv[i]);
+        else if (data->undo)
+            res = decompress_files(data, argv[i]);
+        else
+            res = compress_files(data, argv[i]);
+        if (res == KO)
+            return KO;
+    }
+    return OK;
     /*
     unsigned int a = 145252;
     unsigned int b = 6234621;

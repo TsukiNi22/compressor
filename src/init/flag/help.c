@@ -11,7 +11,7 @@
 /* display the help for the flags '-h' and '--help' */
 int flag_help(void)
 {
-    int res = 0;
+    int res = OK;
 
     /* display the help */
     res = printf("DESCRIPTION:\n"
