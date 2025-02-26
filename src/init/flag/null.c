@@ -9,9 +9,13 @@
 #include "compressor.h"
 #include "error.h"
 
+/* do nothing */
 int flag_null(main_data_t *data, UNUSED int const argc, char const *argv[])
 {
+    /* function argument check */
     if (!data || !argv)
-        return err_prog(PTR_ERR, "In: flag_null", KO);
+        return KO;
+    
+    /* do nothing */
     return OK;
 }

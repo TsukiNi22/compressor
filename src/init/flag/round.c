@@ -5,19 +5,32 @@
 ** Do nothing
 */
 
-#include "my_string.h"
 #include "compressor.h"
 #include "error.h"
+#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
+/* check the syntax and set the new value for the '-r' or '--round' flag */
 int flag_round(main_data_t *data, int const argc, char const *argv[])
 {
+    /* function argument check */
     if (!data || !argv)
-        return err_prog(PTR_ERR, "In: flag_round", KO);
-    if (1 >= argc)
-        return err_system(data, "round: The flag need an argument.", KO);
-    if (!my_str_isnum(argv[1]))
-        return err_system(data, "round: The argument can only be composed of digit (0-9).", KO);
+        return KO;
+
+    /* check the syntax of the parameter */
+    if (1 >= argc) {
+        data->err_sys = true;
+        fprintf(stderr, "round: The flag need an argument.\n");
+        return KO;
+    }
+    if (strspn(argv[1], "0123456789") != strlen(argv[1])) {
+        data->err_sys = true;
+        fprintf(stderr, "round: The argument can only be composed of digit (0-9).\n");
+        return KO;
+    }
+
+    /* set the new value for round */
     data->b_round = true;
     data->round = atoi(argv[1]);
     return OK;

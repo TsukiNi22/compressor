@@ -5,29 +5,39 @@
 ** Init the flag option
 */
 
-#include "write.h"
-#include "my_string.h"
 #include "compressor.h"
 #include "error.h"
+#include <stdio.h>
+#include <string.h>
 #include <stdbool.h>
 
+/* check for the flag who start with '--' is there in the list of knowed flag */
 static int full_flag(main_data_t *data, int const argc, char const *argv[], int const i)
 {
+    /* function argument check */
     if (!data || !argv)
-        return err_prog(PTR_ERR, "In: full_flag", KO);
+        return KO;
+    
+    /* check for each full flag if it's correpond to the one given */
     for (int j = 0; full_flags[j]; j++) {
-        if (my_strcmp(argv[i], full_flags[j]) == 0)
+        if (strcmp(argv[i], full_flags[j]) == 0)
             return flag_functions[j](data, argc - i, &(argv[i]));
     }
+
+    /* retrun an error if it's not a flag in the list */
     data->err_sys = true;
-    my_printf("%O%s: Unknow option.\n", 2, argv[i]);
+    fprintf(stderr, "%s: Unknow option.\n", argv[i]);
     return KO;
 }
 
+/* check for the flag who start with '-' is there in the list of knowed flag */
 static int is_flag_char(char const c, int *index)
 {
+    /* function argument check */
     if (!index)
-        return err_prog(PTR_ERR, "In: is_flag_char", false);
+        return false;
+
+    /* check for each flag char if it's correpond to the one given */
     for (int i = 0; flags[i]; i++) {
         if (c == flags[i]) {
             *index = i;
@@ -37,50 +47,57 @@ static int is_flag_char(char const c, int *index)
     return false;
 }
 
+/* check the arg who start with '-' or '--' is valid flag */
 static int flag(main_data_t *data, int const argc, char const *argv[], int const i)
 {
     int index = 0;
 
+    /* function argument check */
     if (!data || !argv)
-        return err_prog(PTR_ERR, "In: flag", KO);
+        return KO;
+
+    /* check if the arg with '-' or '--' is a valid flag if it is than call the appropriate function */
     for (int j = 1; argv[i][j]; j++) {
         if (!is_flag_char(argv[i][j], &index)) {
             data->err_sys = true;
-            my_printf("%O%c: Unknow option.\n", 2, argv[i][j]);
+            fprintf(stderr, "%c: Unknow option.\n", argv[i][j]);
             return KO;
         }
         if (flags_argc[index] != 0 && (j > 1 || argv[i][j + 1])) {
             data->err_sys = true;
-            my_printf("%O%c: Can't be combined with other.\n",
-            2, argv[i][j]);
+            fprintf(stderr, "%c: Can't be combined with other.\n", argv[i][j]);
             return KO;
         }
         if (flag_functions[index](data, argc - i, &(argv[i])) == KO)
-            return err_prog(UNDEF_ERR, "In: flag", KO);
+            return KO;
     }
     return OK;
 }
 
+/* check the argv for any flag with '-' or '--' */
 int init_flag(main_data_t *data, int const argc, char const *argv[])
 {
+    /* function argument check */
     if (!data || !argv)
-        return err_prog(PTR_ERR, "In: init_flag", KO);
+       return KO;
+    
+    /* check for the help flag */
     for (int i = 0; i < argc; i++) {
         if ((argv[i][0] == '-' && argv[i][1] == flags[0] && !argv[i][2])
-            || my_strcmp(argv[i], full_flags[0]) == 0) {
+            || strcmp(argv[i], full_flags[0]) == 0) {
             data->help = true;
             return flag_help();
         }
     }
+
+    /* check for the other flags */
     for (int i = 0; i < argc; i++) {
         if (argv[i][0] != '-')
             continue;
-        if (argv[i][1] == '-' && argv[i][2]
-            && full_flag(data, argc, argv, i) == KO)
-            return err_prog(UNDEF_ERR, "In: init_flag 2", KO);
-        if (argv[i][1] != '-' && argv[i][1]
-            && flag(data, argc, argv, i) == KO)
-            return err_prog(UNDEF_ERR, "In: init_flag 3", KO);
+        if (argv[i][1] == '-' && argv[i][2] && full_flag(data, argc, argv, i) == KO)
+            return KO;
+        if (argv[i][1] != '-' && argv[i][1] && flag(data, argc, argv, i) == KO)
+            return KO;
     }
     return OK;
 }

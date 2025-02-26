@@ -5,17 +5,34 @@
 ** Display help
 */
 
-#include "write.h"
+#include "error.h"
+#include <stdio.h>
 
+/* display the help for the flags '-h' and '--help' */
 int flag_help(void)
 {
-    return my_printf("DESCRIPTION:\n"
+    int res = 0;
+
+    /* display the help */
+    res = fprintf(stdin, "DESCRIPTION:\n"
     "\tA file compressor with a littel bit of loss (depend of the precision)\n"
     "\tThe ouput file extension is \'.crped\'\n\n"
     "USAGE:\n"
+    "\t./compressor file_name1 [file_name2 ...] -u\n"
     "\t./compressor file_name1 [file_name2 ...] [-p precision] [-r round]\n"
     "\t./compressor file_name1 [file_name2 ...] -c [-p precision] [-r round]\n"
     "\t./compressor -h\n\n"
+    "FLAG:\n"
+    "\t-\'-h\' or \'--help\'\n"
+    "\t\tDisplay this help\n"
+    "\t-\'-u\' or \'--undo\'\n"
+    "\t\tDecompress the given files (default: compression mode)\n"
+    "\t-\'-c\' or \'--calculate\'\n"
+    "\t\tGive the compression percentage with the given parameters\n"
+    "\t-\'-p precision\' or \'--precision precision\'\n"
+    "\t\tChange the precision used (default: 17)\n"
+    "\t-\'-r round\' or \'--round round\'\n"
+    "\t\tChange the number of round used to compresse the files (default: auto (~50%% compression))\n\n"
     "INFORMATION:\n"
     "\t- The precision will be the number of bits used to store some data and change the rapidity of the compression.\n"
     "\t  (min: 1; recommended: 17; max: 25)\n"
@@ -24,4 +41,7 @@ int flag_help(void)
     "\t  (min: 0; max: limited by the size of your file;)\n"
     "\t  default: until 50%% of compression\n"
     "\t- You can use the \'-c\' or \'--calculate\' to know the compression percentage with the actual input\n");
+    if (res < 0)
+        return KO;
+    return OK;
 }

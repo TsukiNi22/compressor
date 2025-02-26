@@ -1,16 +1,15 @@
 /*
 ** EPITECH PROJECT, 2025
-** free_data.c
+** decompress_files.c
 ** File description:
-** Free data
+** Decompress the files
 */
 
 #include "compressor.h"
 #include "error.h"
-#include <stdlib.h>
 
-/* free the data malloced */
-int free_data(main_data_t *data)
+/* decompress the files given */
+int decompress_files(main_data_t *data)
 {
     /* function argument check */
     if (!data)

@@ -56,15 +56,15 @@ typedef struct main_data_s {
 //----------------------------------------------------------------//
 /* PROTOTYPE */
 
-/* compressor */ // Error: KO
-int compressor(int const argc, char const *argv[], main_data_t *data);
-int bits_compressor(int precision, int max, info_t *info, unsigned int a, unsigned int b);
-int bits_decompressor(int precision, int max, info_t *info, unsigned int *a, unsigned int *b);
-int calculate(main_data_t *data);
-int decompress_files(main_data_t *data);
-int compress_files(main_data_t *data);
+/* compressor */
+int compressor(int const argc, char const *argv[], main_data_t *data); // Error: KO
+int bits_compressor(int precision, int max, info_t *info, unsigned int a, unsigned int b); // Error: KO
+int bits_decompressor(int precision, int max, info_t *info, unsigned int *a, unsigned int *b); // Error: KO
+int calculate(main_data_t *data); // Error: KO
+int decompress_files(main_data_t *data); // Error: KO
+int compress_files(main_data_t *data); // Error: KO
 
-    /* init_data */
+/* init_data */
 int init_data(main_data_t *data); // Error: KO
 
 /* init_flag */
@@ -77,7 +77,7 @@ int flag_round(main_data_t *data, int const argc, char const *argv[]); // Error:
 int flag_calculate(main_data_t *data, int const argc, char const *argv[]); // Error: KO
 
 /* exit */
-int free_data(main_data_t *data); // Error: EPITECH_ERR
+int free_data(main_data_t *data); // Error: KO
 
 //----------------------------------------------------------------//
 /* GLOBAL_CONST */

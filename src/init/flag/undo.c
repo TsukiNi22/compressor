@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2025
-** calculate.c
+** undo.c
 ** File description:
 ** Do nothing
 */
@@ -9,14 +9,14 @@
 #include "compressor.h"
 #include "error.h"
 
-/* activate the calculate option */
-int flag_calculate(main_data_t *data, UNUSED int const argc, char const *argv[])
+/* activate the undo option */
+int flag_undo(main_data_t *data, UNUSED int const argc, char const *argv[])
 {
     /* function argument check */
     if (!data || !argv)
         return KO;
 
-    /* set the value of the boolean to true */
-    data->calculate = true;
+    /* change the boolean value of the undo option to true */
+    data->undo = true;
     return OK;
 }

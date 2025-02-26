@@ -1,16 +1,15 @@
 /*
 ** EPITECH PROJECT, 2025
-** free_data.c
+** calculate.c
 ** File description:
-** Free data
+** Calcul the compresion percentage with the given paramtere
 */
 
 #include "compressor.h"
 #include "error.h"
-#include <stdlib.h>
 
-/* free the data malloced */
-int free_data(main_data_t *data)
+/* calculate the percentage of compresion */
+int calculate(main_data_t *data)
 {
     /* function argument check */
     if (!data)
