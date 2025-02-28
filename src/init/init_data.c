@@ -7,6 +7,7 @@
 
 #include "compressor.h"
 #include "error.h"
+#include <stddef.h>
 
 /* init the main struct with default value */
 int init_data(main_data_t *data)
@@ -28,6 +29,8 @@ int init_data(main_data_t *data)
     data->redution_size = INT_BITS_SIZE + data->precision + ZERO_NB_SIZE + OVERFLOW_SIZE;
     
     /* set to 0 the global var */
+    data->file = NULL;
+    data->compressed_file = NULL;
     data->round_nb = 0;
     return OK;
 }

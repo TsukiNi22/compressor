@@ -23,6 +23,9 @@
     #define ZERO_NB_SIZE 5
     #define INT_BITS_SIZE 32
 
+    /* extension */
+    #define EXTENSION ".crped"
+
 //----------------------------------------------------------------//
 /* TYPEDEF */
 
@@ -45,6 +48,8 @@ typedef struct main_data_s {
     unsigned int redution_size;
     
     /* global var */
+    char *file;
+    char *compressed_file;
     int round_nb;
 
     /* help */
