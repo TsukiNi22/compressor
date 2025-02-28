@@ -42,8 +42,8 @@ INIT :=		init/init_data.c \
 BITS := 	bits_edit/bits_compressor.c \
 			bits_edit/bits_decompressor.c
 
-MAIN := 	execution_files/compress_files.c \
-			execution_files/decompress_files.c \
+MAIN := 	execution_files/compress_file.c \
+			execution_files/decompress_file.c \
 			execution_files/calculate.c
 
 FILES := $(GLOBAL) $(INIT) $(BITS) $(MAIN)

@@ -82,9 +82,9 @@ int compressor(int const argc, char const *argv[], main_data_t *data)
         if (data->calculate)
             res = calculate(data, argv[i]);
         else if (data->undo)
-            res = decompress_files(data, argv[i]);
+            res = decompress_file(data, argv[i]);
         else
-            res = compress_files(data, argv[i]);
+            res = compress_file(data, argv[i]);
         if (res == KO)
             return KO;
     }

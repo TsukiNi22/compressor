@@ -14,6 +14,17 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+/* compress the file */
+static int compress(main_data_t *data)
+{
+    /* function argument check */
+    if (!data)
+        return KO;
+
+
+    return OK;
+}
+
 /* get the new path to a file with the new extension */
 static char *get_file_path_compressed(char const *file_path)
 {
@@ -77,6 +88,7 @@ int compress_file(main_data_t *data, char const *file_path)
         return KO;
     }
     memset(data->file, 0, (st.st_size + 1));
+    memset(data->compressed_file, 0, (st.st_size + 1));
     file = fopen(file_path, "rb");
     if (!file) {
         data->err_sys = true;
@@ -109,6 +121,11 @@ int compress_file(main_data_t *data, char const *file_path)
         perror("write");
         return KO;
     }
+    free(file_path_compressed);
     fclose(file);
+
+    /* free file content */
+    free(data->file);
+    free(data->compressed_file);
     return OK;
 }
