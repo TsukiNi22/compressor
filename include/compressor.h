@@ -67,8 +67,8 @@ int compressor(int const argc, char const *argv[], main_data_t *data); // Error:
 int bits_compressor(int precision, int max, info_t *info, unsigned int a, unsigned int b); // Error: KO
 int bits_decompressor(int precision, int max, info_t *info, unsigned int *a, unsigned int *b); // Error: KO
 int calculate(main_data_t *data, char const *file_path); // Error: KO
-int decompress_files(main_data_t *data, char const *file_path); // Error: KO
-int compress_files(main_data_t *data, char const *file_path); // Error: KO
+int decompress_file(main_data_t *data, char const *file_path); // Error: KO
+int compress_file(main_data_t *data, char const *file_path); // Error: KO
 
 /* init_data */
 int init_data(main_data_t *data); // Error: KO

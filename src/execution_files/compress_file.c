@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2025
-** compress_files.c
+** compress_file.c
 ** File description:
-** Compress the given files
+** Compress the given file
 */
 
 #include "compressor.h"
@@ -47,7 +47,7 @@ static char *get_file_path_compressed(char const *file_path)
 }
 
 /* compress the files given */
-int compress_files(main_data_t *data, char const *file_path)
+int compress_file(main_data_t *data, char const *file_path)
 {
     FILE *file = NULL;
     struct stat st = {0};
@@ -90,11 +90,14 @@ int compress_files(main_data_t *data, char const *file_path)
     }
     fclose(file);
 
+    /* compress file */
+    if (compress(data) == KO)
+        return KO;
+
     /* write the compressed file */
     file_path_compressed = get_file_path_compressed(file_path);
     if (!file_path_compressed)
         return KO;
-    return OK;
     file = fopen(file_path_compressed, "wb");
     if (!file) {
         data->err_sys = true;
