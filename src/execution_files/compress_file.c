@@ -14,14 +14,50 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+void print_binary(long long n) {
+    for (int i = 63; i >= 0; i--) {  // Parcourir les 32 bits (pour un int)
+        putchar((n & (1 << i)) ? '1' : '0');
+        if (i % 4 == 0) putchar(' ');  // Espacement pour lisibilité
+    }
+    putchar('\n');
+}
+
 /* compress the file */
-static int compress(main_data_t *data)
+static int compress(main_data_t *data, int size)
 {
+    unsigned int compressed_index = 5;
+    unsigned int a, b = 0;
+    info_t info = {0};
+
     /* function argument check */
     if (!data)
         return KO;
 
+    /* compress file */
+    data->round_nb++;
+    for (int i, index = 0; i < size / 8; i++) {
+        index = i * 8;
+        a = 0;
+        b = 0;
+        for (int j = 0; j < 4; j++) {
+            a += data->file[index + j];
+            a <<= 8;
+        }
+        for (int j = 0; j < 4; j++) {
+            b += data->file[index + j + 4];
+            b <<= 8;
+        }
+        if (bits_compressor(data->precision, data->max, &info, a, b) == KO)
+            return KO;
+        print_binary(info.value);
+        for (int j = 0; j < 8; j++, compressed_index++)
+            data->compressed_file[compressed_index] = (info.value >> 8 * (7 - j)) & 255;
+    }
 
+    /* set the number of round + precision used */
+    for (int j = 0; j < 4; j++)
+        data->compressed_file[j] = (data->round_nb >> 8 * (3 - j)) & 255;
+    data->compressed_file[4] = data->precision;
     return OK;
 }
 
@@ -103,7 +139,7 @@ int compress_file(main_data_t *data, char const *file_path)
     fclose(file);
 
     /* compress file */
-    if (compress(data) == KO)
+    if (compress(data, st.st_size) == KO)
         return KO;
 
     /* write the compressed file */

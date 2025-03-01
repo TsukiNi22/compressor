@@ -32,7 +32,7 @@
 /* info */
 typedef union info_u {
     unsigned long long value;
-    char str[7];
+    char str[8];
 } info_t;
 
 /* data */
@@ -48,9 +48,9 @@ typedef struct main_data_s {
     unsigned int redution_size;
     
     /* global var */
+    int round_nb;
     char *file;
     char *compressed_file;
-    int round_nb;
 
     /* help */
     bool help;
