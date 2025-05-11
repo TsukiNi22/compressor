@@ -14,10 +14,10 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-void print_binary(long long n) {
-    for (int i = 63; i >= 0; i--) {  // Parcourir les 32 bits (pour un int)
+void print_binary(long long n, int size) {
+    for (int i = size - 1; i >= 0; i--) {
         putchar((n & (1 << i)) ? '1' : '0');
-        if (i % 4 == 0) putchar(' ');  // Espacement pour lisibilité
+        if (i % 8 == 0) putchar(' ');
     }
     putchar('\n');
 }
@@ -35,21 +35,19 @@ static int compress(main_data_t *data, int size)
 
     /* compress file */
     data->round_nb++;
-    for (int i, index = 0; i < size / 8; i++) {
+    for (int index, i = 0; i < size / 8; i++) {
         index = i * 8;
         a = 0;
         b = 0;
-        for (int j = 0; j < 4; j++) {
-            a += data->file[index + j];
-            a <<= 8;
-        }
-        for (int j = 0; j < 4; j++) {
-            b += data->file[index + j + 4];
-            b <<= 8;
-        }
+        for (int j = 0; j < 4; j++)
+            a += data->file[index + j] << 8 * (3 - j);
+        for (int j = 0; j < 4; j++)
+            b += data->file[index + j + 4]  << 8 * (3 - j);
         if (bits_compressor(data->precision, data->max, &info, a, b) == KO)
             return KO;
-        print_binary(info.value);
+        print_binary(a, 32);
+        print_binary(b, 32);
+        print_binary(info.value, 64);
         for (int j = 0; j < 8; j++, compressed_index++)
             data->compressed_file[compressed_index] = (info.value >> 8 * (7 - j)) & 255;
     }
