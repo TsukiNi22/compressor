@@ -36,7 +36,8 @@ File Description:
     #define INT_BITS_SIZE 32
 
     /* extension */
-    #define EXTENSION ".crped"
+    #define EXTENSION_CR ".crped"
+    #define EXTENSION_UCR ".ucrped"
 
 //----------------------------------------------------------------//
 /* TYPEDEF */
@@ -44,7 +45,7 @@ File Description:
 /* info */
 typedef union info_u {
     unsigned long long value;
-    char str[8];
+    unsigned char str[8];
 } info_t;
 
 /* data */
@@ -62,8 +63,9 @@ typedef struct main_data_s {
     /* global var */
     unsigned int octet;
     int round_nb;
-    char *file;
-    char *compressed_file;
+    unsigned char *file;
+    unsigned char *compressed_file;
+    unsigned char *decompressed_file;
 
     /* help */
     bool help;

@@ -14,15 +14,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-void print_binary(unsigned long long val, int bits)
-{
-    for (int i = bits - 1; i >= 0; --i) {
-        printf("%lld", (val >> i) & 1);
-        if (i % 8 == 0) printf(" ");
-    }
-    printf("\n");
-}
-
 /* compress the file */
 static int compress(main_data_t *data, int size)
 {
@@ -49,13 +40,14 @@ static int compress(main_data_t *data, int size)
             return KO;
         for (int j = 0; j < 8; j++, compressed_index++)
             data->compressed_file[compressed_index] = (info.value >> 8 * (7 - j)) & 0xFF;
-        bits += INT_BITS_SIZE + data->precision + ZERO_NB_SIZE + OVERFLOW_SIZE + GREATER_SIZE;
+        //bits += INT_BITS_SIZE + data->precision + ZERO_NB_SIZE + OVERFLOW_SIZE + GREATER_SIZE;
+        bits += 8 * 8;
     }
 
     /* set the number of round + precision used */
     bits += 5 * 8;
     for (int j = 0; j < 4; j++)
-        data->compressed_file[j] = (data->round_nb >> 8 * (3 - j)) & 255;
+        data->compressed_file[j] = (data->round_nb >> 8 * (3 - j)) & 0xFF;
     data->compressed_file[4] = data->precision;
 
     /* set the number of octet to write in the compressed file */
@@ -81,7 +73,7 @@ static char *get_file_path_compressed(char const *file_path)
             ptr = c;
     }
     for (len[0] = 0; file_path[len[0]] && &(file_path[len[0]]) != ptr; len[0]++);
-    for (len[1] = 0; EXTENSION[len[1]]; len[1]++);
+    for (len[1] = 0; EXTENSION_CR[len[1]]; len[1]++);
     path = malloc(sizeof(char) * (len[0] + len[1] + 1));
     if (!path)
         return NULL;
@@ -90,8 +82,8 @@ static char *get_file_path_compressed(char const *file_path)
     memset(path, 0, (len[0] + len[1] + 1));
     for (int j = 0; file_path[j] && &(file_path[j]) != ptr; i++, j++)
         path[i] = file_path[j];
-    for (int j = 0; EXTENSION[j]; i++, j++)
-        path[i] = EXTENSION[j];
+    for (int j = 0; EXTENSION_CR[j]; i++, j++)
+        path[i] = EXTENSION_CR[j];
     return path;
 }
 
@@ -126,7 +118,7 @@ int compress_file(main_data_t *data, char const *file_path)
         return KO;
     }
     memset(data->file, 0, (st.st_size + 1));
-    memset(data->compressed_file, 0, (st.st_size + 1));
+    memset(data->compressed_file, 0, (st.st_size + 5 + 1));
     file = fopen(file_path, "rb");
     if (!file) {
         data->err_sys = true;
