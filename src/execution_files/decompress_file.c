@@ -40,6 +40,10 @@ static int decompress(main_data_t *data, int size)
         data->round_nb += (data->file[j] << 8 * (3 - j)) & 0xFF;
     data->precision = data->file[4];
 
+    data->max = 0;
+    for (unsigned int n = 1, i = 0; i < (unsigned int) data->precision; n <<= 1, i++)
+        data->max += n;
+
     /* compress file */
     data->round_nb--;
     for (int index, i = 0; i < (size - 5) / 8; i++) {
@@ -49,6 +53,7 @@ static int decompress(main_data_t *data, int size)
         info.value = 0;
         for (int j = 0; j < 8; j++)
             info.value += (((unsigned long long) data->file[index + j + 5]) & 0xFF) << 8 * (7 - j);
+        print_binary(info.value, 64);
         if (bits_decompressor(data->precision, data->max, &info, &a, &b) == KO)
             return KO;
         print_binary(a, 32);
