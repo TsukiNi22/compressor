@@ -44,9 +44,9 @@ int flag_precision(main_data_t *data, int const argc, char const *argv[])
 
     /* set the new precision defined */
     data->precision = atoi(argv[1]);
-    if (data->precision < 1 || data->precision > 25) {
+    if (data->precision < 1 || data->precision > 24) {
         data->err_sys = true;
-        fprintf(stderr, "precision: The precision can only be between \'1\' and \'25\'.\n");
+        fprintf(stderr, "precision: The precision can only be between \'1\' and \'24\'.\n");
         return KO;
     }
     return OK;

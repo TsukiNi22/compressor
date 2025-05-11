@@ -14,12 +14,13 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-void print_binary(long long n, int size) {
-    for (int i = size - 1; i >= 0; i--) {
-        putchar((n & (1 << i)) ? '1' : '0');
-        if (i % 8 == 0) putchar(' ');
+void print_binary(unsigned long long val, int bits)
+{
+    for (int i = bits - 1; i >= 0; --i) {
+        printf("%lld", (val >> i) & 1);
+        if (i % 8 == 0) printf(" ");
     }
-    putchar('\n');
+    printf("\n");
 }
 
 /* compress the file */
@@ -27,6 +28,7 @@ static int compress(main_data_t *data, int size)
 {
     unsigned int compressed_index = 5;
     unsigned int a, b = 0;
+    unsigned int bits = 0;
     info_t info = {0};
 
     /* function argument check */
@@ -45,17 +47,19 @@ static int compress(main_data_t *data, int size)
             b += data->file[index + j + 4]  << 8 * (3 - j);
         if (bits_compressor(data->precision, data->max, &info, a, b) == KO)
             return KO;
-        print_binary(a, 32);
-        print_binary(b, 32);
-        print_binary(info.value, 64);
         for (int j = 0; j < 8; j++, compressed_index++)
-            data->compressed_file[compressed_index] = (info.value >> 8 * (7 - j)) & 255;
+            data->compressed_file[compressed_index] = (info.value >> 8 * (7 - j)) & 0xFF;
+        bits += INT_BITS_SIZE + data->precision + ZERO_NB_SIZE + OVERFLOW_SIZE + GREATER_SIZE;
     }
 
     /* set the number of round + precision used */
+    bits += 5 * 8;
     for (int j = 0; j < 4; j++)
         data->compressed_file[j] = (data->round_nb >> 8 * (3 - j)) & 255;
     data->compressed_file[4] = data->precision;
+
+    /* set the number of octet to write in the compressed file */
+    data->octet = bits / 8 + (bits % 8 > 0);
     return OK;
 }
 
@@ -115,7 +119,7 @@ int compress_file(main_data_t *data, char const *file_path)
     if (data->compressed_file)
         free(data->compressed_file);
     data->file = malloc(sizeof(char) * (st.st_size + 1));
-    data->compressed_file = malloc(sizeof(char) * (st.st_size + 1));
+    data->compressed_file = malloc(sizeof(char) * (st.st_size + 5 + 1));
     if (!data->file || !data->compressed_file) {
         data->err_sys = true;
         perror("malloc");
@@ -150,7 +154,7 @@ int compress_file(main_data_t *data, char const *file_path)
         perror(file_path_compressed);
         return KO;
     }
-    if (fwrite(data->compressed_file, 1, st.st_size, file) != (size_t) st.st_size) {
+    if (fwrite(data->compressed_file, 1, data->octet, file) != (size_t) data->octet) {
         data->err_sys = true;
         perror("write");
         return KO;

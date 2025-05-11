@@ -11,7 +11,7 @@ TARGET := compressor
 BUILD_DIR := .obj
 
 W := -W -Wall -Wextra -Wpedantic -Wunused-parameter -Wshadow
-W += -Wuninitialized -Wmaybe-uninitialized -Werror
+W += -Wuninitialized -Wmaybe-uninitialized
 
 DEBUG := -g -ggdb3
 

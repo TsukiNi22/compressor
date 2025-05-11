@@ -102,19 +102,28 @@ int compressor(int const argc, char const *argv[], main_data_t *data)
     }
     return OK;
     /*
+    #include <stdio.h>
     unsigned int a = 145252;
     unsigned int b = 6234621;
     info_t info = {0};
 
     // compresion //
-    if (compress_data(data->precision, data->max, &info, a, b) == KO)
-        return err_prog(UNDEF_ERR, "In: compressor 1", KO);
-    #include <stdio.h>
+    if (bits_compressor(data->precision, data->max, &info, a, b) == KO)
+        return KO;
     printf("%u | %u\n", a, b);
-
+    print_binary(a, 32);
+    print_binary(b, 32);
+    print_binary(info.value, 64);
+    
+    a = 0;
+    b = 0;
     // decompresion //
-    if (decompress_data(data->precision, data->max, &info, &a, &b) == KO)
-        return err_prog(UNDEF_ERR, "In: compressor 2", KO);
+    if (bits_decompressor(data->precision, data->max, &info, &a, &b) == KO)
+        return KO;
     printf("%u | %u\n", a, b);
+    print_binary(a, 32);
+    print_binary(b, 32);
+    print_binary(info.value, 64);
     */
+    return OK;
 }

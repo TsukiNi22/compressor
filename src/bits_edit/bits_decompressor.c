@@ -28,7 +28,7 @@ int bits_decompressor(int precision, int max, info_t *info, unsigned int *a, uns
     /* extract the value from the information value */
     unsigned long long c = info->value & UINT_MAX;
     double percent = (info->value >> INT_BITS_SIZE) & max;
-    unsigned int zero_nb = (info->value >> (INT_BITS_SIZE + precision)) & 31; // 11111
+    unsigned int zero_nb = (info->value >> (INT_BITS_SIZE + precision)) & 31; // 11111 -> 5 bytes
     bool overflow = (info->value >> (INT_BITS_SIZE + precision + ZERO_NB_SIZE)) & 1;
     bool a_greater = (info->value >> (INT_BITS_SIZE + precision + ZERO_NB_SIZE + OVERFLOW_SIZE)) & 1;
 
@@ -48,7 +48,7 @@ int bits_decompressor(int precision, int max, info_t *info, unsigned int *a, uns
         if (c - *a > UINT_MAX)
             *a += (c - *a) % UINT_MAX;
         *b = c - *a;
-    } else  {
+    } else {
         *b = round((double) c * percent);
         if (c - *b > UINT_MAX)
             *b += (c - *b) % UINT_MAX;

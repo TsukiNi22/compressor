@@ -54,12 +54,13 @@ typedef struct main_data_s {
     bool undo;
 
     /* global const */
-    char precision; // 1 <-> 17 // 25
+    char precision; // 1 <-> 17 // 24
     unsigned int round;
     unsigned int max;
     unsigned int redution_size;
     
     /* global var */
+    unsigned int octet;
     int round_nb;
     char *file;
     char *compressed_file;
