@@ -14,16 +14,9 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-void print_binary(unsigned long long val, int bits)
-{
-    for (int i = bits - 1; i >= 0; --i) {
-        printf("%lld", (val >> i) & 1);
-        if (i % 8 == 0) printf(" ");
-    }
-    printf("\n");
-}
+void print_binary(unsigned long long val, int bits);
 
-/* compress the file */
+    /* compress the file */
 static int decompress(main_data_t *data, int size)
 {
     unsigned int compressed_index = 0;

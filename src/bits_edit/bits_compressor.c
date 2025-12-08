@@ -8,7 +8,7 @@
  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
 
 Edition:
-##  11/05/2025 by Tsukini
+##  15/06/2025 by Tsukini
 
 File Name:
 ##  bits_compressor.c
